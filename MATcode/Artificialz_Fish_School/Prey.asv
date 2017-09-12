@@ -1,0 +1,27 @@
+function x = Prey(x, dim)
+%第二个子涵数
+Trynumber = 3; % 可输入（改变）
+visual = 1; % 可输入（改变）
+step = 0.01;
+p = zeros(1, dim);
+
+for i = 1: Trynumber
+    for j = 1: dim
+        xt(i, j) = x(i, j) + rand*step*visual;
+    end
+    if fun(xt(i,:), dim) > fun(x(1, :), dim)
+        for j = 1: dim
+            xnext(i, j) = x(i, j) + rand*step*(xt(i,j) - x(i,j));
+            if xnext(i, j) > 10
+                xnext(i, j) = 10;
+            elseif xnext(i, j) < 0
+                xnext(i, j) = 0;
+            end
+            p(j) = 1;
+            break;
+        end
+    end
+    for k = 1:dim
+        if p(j) == 0
+            xnext(i, 
+
