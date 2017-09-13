@@ -1,51 +1,59 @@
 clc;
 clear;
 N = 50; % N为鱼群规模，即鱼的条数
-visual = 0.9;% 表示可视范围
-step = 0.02; % 步长，即拥挤度因子
-dim = 2;
-maxiter = 300;
-lwbnd = -100;
+visual = 0.9;% 表示可视范围，人工鱼的视力范围
+step = 0.02; % 步长，即拥挤度因子，用来调节鱼群的拥挤度
+dim = 2; % 每一维代表一个未知数
+maxiter = 300; %最大迭代次数
+lwbnd = -100; % 移动范围的上下界
 upbnd = 100;
 pop = rand(N, dim) * (upbnd - lwbnd) + lwbnd; % 初始化鱼群当前所处位置
+plot(pop(:,1), pop(:,2), '*');% 鱼群的分布位置
 xspop = pop; 
 xfpop = pop;
 xpop = pop;
 for i = 1:N
-    fval = fun(pop(i, :), dim); %计算粒子适应度值
+    fval = fun(pop(i, :), dim); %计算粒子适应度值 初始化一下
 end
 
-[gfval, g] = min(fval);
+[gfval, g] = min(fval); % 找出全局目前最优的粒子(也是一个初始化的过程)
 gbest = pop(g,:); % 全局最优值及其位置
 %gfval = inf;
 %gbest = pop(1,:);
-gf = zeros(1, maxiter); %记录每一次循环得到的最优结果
+gf = zeros(1, maxiter); %记录每一次循环得到的最优结果（初始化一个零矩阵）
 %开始迭代
 for iter = 1: maxiter
     for i = 1: N
+        %开始觅食 人工鱼会朝着食物较多的方向游动
         nf = 0; % nf为当前鱼周围可视范围内的伙伴鱼条数（不含当前鱼）
         xcpop = rand(1, dim); % cx 当前与可视范围内伙伴鱼的中心位置
+        % 在可视范围内人工鱼的条数
         for j = 1: N
             for k = 1:dim
-                if abs(pop(i, k) - pop(j, k)) > 0 && abs(pop(i, k) - pop(j, k)) < visual;
-                    xcpop(1, k) = xcpop(1, k) + pop(j, k);
+                if abs(pop(i, k) - pop(j, k)) > 0 && abs(pop(i, k) - pop(j, k)) < visual; %搜索领域内的伙伴数目nf
+                    xcpop(1, k) = xcpop(1, k) + pop(j, k);% 中心位置2
                     nf = nf + 1;
                 end
             end
         end
         if  nf > 0
-            nf = nf/N;
+            nf = nf/N;% 周围鱼群的拥挤因子
             xcpop = xcpop/nf; % 找到伙伴鱼的中心位置
         end
+        %群聚行为的原则
+        %一是要使人工鱼个体尽量向伙伴的中心方向游动
+        %二是要尽量避免鱼群过分地拥挤
         if fun(xcpop(1, :), dim) < fun(pop(i, :), dim)
+            % 若人工鱼的伙伴中心状态比其当前所处状态的目标函数值更优，
+            % 则该人工鱼可以向伙伴的中心位置Xc前进一步；
             for k = 1:dim
                 xspop(i, :) = pop(i, :) + rand*step*(xcpop(1,:) - pop(i, :));
             end
-        else
+        else % 否则执行觅食行为
             xspop(i, :) = Prey(pop(i, :), dim);
         end % 聚群行为结束
         if fun(xcpop(1, :),dim ) < gfval
-            gfval = fun(xcpop(1, :), dim);
+            gfval = fun(xcpop(1, :), dim); % 得到当前全局最优位置和最优函数值
             gbest = xcpop(1, :);
         end
         for j = 1:N
@@ -60,7 +68,7 @@ for iter = 1: maxiter
         end
         if gbest == pop(i, :)
             xfpop(i,:) = pop(i, :) + rand*step*(gbest(1, :) - pop(i, :));
-            for m = 1:dim
+            for m = 1:dim % 判断所求解是否越界，如果越界就会把其归为边界元素
                 if xfpop(i, m) > upbnd
                     xfpop(i, m) = upbnd;
                 elseif xfpop(i, m) < lwbnd % 判断是否越界
