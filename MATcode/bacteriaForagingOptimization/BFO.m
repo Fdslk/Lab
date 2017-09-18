@@ -26,18 +26,18 @@ while iter <= maxiter
     for l = 1:Ned % 迁徙操作
         for k = 1: Nre % 复制性操作
             for j = 1: Nc % 趋向性操作
-                for i = 1:N 
-                    if rand > 0.5
+                for i = 1:N % 观察是否超过了种群数目
+                    if rand > 0.5 %旋转（细菌i在旋转后随机产生的方向上游动一步长单位）
                         cpop(1, :) = pop(i, :) + c(i)*pop(i, :);
                     else
                         cpop(1,:) = pop(i, :) - c(i)*pop(i, :);
                     end
-                    cfval = fun(cpop(1,:), dim);
+                    cfval = fun(cpop(1,:), dim); % 重新计算新位置上的适应度值
                 end
                 for i = 1:N
-                    m = 0; %激活游动长度
+                    m = 0; %激活游动长度 初始化
                     while m < Ns
-                        if cfval < gfval
+                        if cfval < gfval % 比较新位置上的适应度值是否比原先的要好
                             pop(i, :) = cpop;
                             fval(i) = cfval;
                             gfval = cfval;
@@ -49,12 +49,12 @@ while iter <= maxiter
                 % 复制性操作
                 [so_fval, loc] = sort(fval);
                 for i = 1:(N/2)
-                    pop(loc(i + N/2), :) = pop(loc(i), :);
+                    pop(loc(i + N/2), :) = pop(loc(i), :); % 复制操作，也就是把后几名淘汰掉，把优越性的粒子加入进去
                 end
                 % 迁徙操作
                 for i = 1:N
                     if Ped > rand
-                        pop(i, :) = rand(1, dim)*(upbnd - lwbnd) + lwbnd;
+                        pop(i, :) = rand(1, dim)*(upbnd - lwbnd) + lwbnd; % 细菌i灭亡，随机产生新的细菌i
                     end
                 end
             end
@@ -63,15 +63,15 @@ while iter <= maxiter
     for i = 1: N
         fval(i) = fun(pop(i, :),dim); % 计算适应度值
     end
-    [pfval, g] = min(fval);
+    [pfval, g] = min(fval); % 暂时用来求最小值
     pbest = pop(g, :); % 最优适应度值和位置
-    if pfval < gfval
+    if pfval < gfval % 寻找出一次迭代中的最优值
         gfval = pfval;
         gbest = pbest;
     end
     gf(iter) = gfval;
     iter = iter + 1;
-    iter
+    iter   
 end
 t = [1: maxiter];
 plot(t, gf);

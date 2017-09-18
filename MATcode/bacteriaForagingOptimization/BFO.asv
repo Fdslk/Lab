@@ -26,8 +26,8 @@ while iter <= maxiter
     for l = 1:Ned % 迁徙操作
         for k = 1: Nre % 复制性操作
             for j = 1: Nc % 趋向性操作
-                for i = 1:N 
-                    if rand > 0.5
+                for i = 1:N % 观察是否超过了种群数目
+                    if rand > 0.5 %旋转（细菌i在旋转后随机产生的方向上游动一步长单位）
                         cpop(1, :) = pop(i, :) + c(i)*pop(i, :);
                     else
                         cpop(1,:) = pop(i, :) - c(i)*pop(i, :);
@@ -35,7 +35,7 @@ while iter <= maxiter
                     cfval = fun(cpop(1,:), dim);
                 end
                 for i = 1:N
-                    m = 0; %激活游动长度
+                    m = 0; %激活游动长度 初始化
                     while m < Ns
                         if cfval < gfval
                             pop(i, :) = cpop;
@@ -71,7 +71,7 @@ while iter <= maxiter
     end
     gf(iter) = gfval;
     iter = iter + 1;
+    iter   
 end
-t = [1, maxiter];
-X = len
+t = [1: maxiter];
 plot(t, gf);
