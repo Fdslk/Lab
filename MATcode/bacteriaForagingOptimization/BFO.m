@@ -27,10 +27,12 @@ while iter <= maxiter
         for k = 1: Nre % 复制性操作
             for j = 1: Nc % 趋向性操作
                 for i = 1:N % 观察是否超过了种群数目
+                    % 自适应步长
+                    step_new =  (fval(i).^(1/3) + (3/5)*10.^((maxiter - iter)/maxiter))/(fval(i).^(1/3)+30);
                     if rand > 0.5 %旋转（细菌i在旋转后随机产生的方向上游动一步长单位）
-                        cpop(1, :) = pop(i, :) + c(i)*pop(i, :);
+                        cpop(1, :) = pop(i, :) + step_new*pop(i, :);
                     else
-                        cpop(1,:) = pop(i, :) - c(i)*pop(i, :);
+                        cpop(1,:) = pop(i, :) - step_new*pop(i, :);
                     end
                     cfval = fun(cpop(1,:), dim); % 重新计算新位置上的适应度值
                 end
@@ -54,6 +56,9 @@ while iter <= maxiter
                 % 迁徙操作
                 for i = 1:N
                     if Ped > rand
+                        % 改进：给定概率Ped，若随机值小于Ped，则按照高斯分布函数在最优个数
+                        % 附近产生重构个体。
+                        %pop(i, :) = 0.8*gbest + rand(1, dim)*ones(1,dim);
                         pop(i, :) = rand(1, dim)*(upbnd - lwbnd) + lwbnd; % 细菌i灭亡，随机产生新的细菌i
                     end
                 end
@@ -67,7 +72,7 @@ while iter <= maxiter
     pbest = pop(g, :); % 最优适应度值和位置
     if pfval < gfval % 寻找出一次迭代中的最优值
         gfval = pfval;
-        gbest = pbest;
+        gbest = pbest;% gbest全局最优解位置
     end
     gf(iter) = gfval;
     iter = iter + 1;
