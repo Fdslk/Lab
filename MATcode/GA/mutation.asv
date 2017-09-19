@@ -1,0 +1,9 @@
+function populnew = mutation(popul, pmut, n, length, dim)
+% 子函数5 变异函数
+k = 1;
+while k <= n
+    rk = rand();
+    if rk = 
+
+end
+
