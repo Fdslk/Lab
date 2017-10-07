@@ -57,6 +57,6 @@ with open(input_file, 'r') as csv_in_file:
 		for row_list in filereader:
 			name = row_list[1]
 			if pattern.search(name):
-				filewriter.writerow(row_list)
+				filewriter.writerow(row_list)  
 
 
