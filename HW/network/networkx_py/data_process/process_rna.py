@@ -8,7 +8,7 @@ input_file = sys.argv[1]
 conn = MySQLdb.connect(host='localhost', user='user', db='db_test', port=3306)
 c = conn.cursor()
 create_sql = """create table if not exists RNA_NPInter(Num VARCHAR(10),
-											RNA_Name Varchar(40));"""
+						RNA_Name Varchar(40));"""
 insert_sql = "insert into RNA_NPInter values(%s, %s)"
 interClass_index = 14
 interLevel_index = 15
