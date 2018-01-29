@@ -3,7 +3,7 @@ title: Drug-Target
 grammar_cjkRuby: true
 ---
 
- - Article name ：drug-target network
+ - Article name ：**==drug-target network==**
 type：review article published in the nature journal
 Goal：**to understand drug targets in the context of cellular and disease networks**
 Works：
@@ -36,5 +36,40 @@ main method:
 	
 according to this paper, I could draw a conclusion that the main target of the drug are the proteins, especially the diseased-associated proteins.And then based on the mathmatical method to calculate the nuknown connection between the drug and the targets. 
 
+ - article name **==Drug Target Protein-Protein Interaction networks:A Systematic perspective==**
+	 - type: method article published by the BioMed Research International
+	 - main ways: According to some special topological structures of the drug targets, there are significant differences between known targets and other proteins.(**intermediaries, source, of the drug stimulus, and special topological features**)
+	 - ==exsiting method to predict drug target==:
+		 - build a bipartite graph composed of US food and Drug Administration-approved drugs and proteins linked by drug target binnary associations.
+		 - using the chemical 2D structural similarity
+			 - ==Relating protein pharmacology by ligand chemistry #768000==
+		 - using the phenotypic side-effect similarities
+			 - ==Drug target identifcation using side-eﬀect similarity #768000==
+		 - topographical analysis of the complex network of intercellular protein interactions may also lead to new avenues for targets prediction.
+	- data resource: PPI Database  HPRD, IntAct, BoGRID,MINT, and DIP.
+		- ==there is a question that how we can find the target protein data in the DrugBank #801e00==
+	- ==related software==:
+		- pepstats, an online software from EMBOSS to calculate statistics of protein properties.(then all proteins which belong to the dataset will have 39 chemical and physical properties).
+
+![data resources][2]
+
+ - Discussion:
+	 - (1)the intermediaries which play an important role on interactions of the drug targets network
+	 - (2)the sources which convert drug stimulus into the desirable therapeutic effects and spread to other proteins
+	 - (3)the proteins which have special topological and functional significance
+	 
+- conclusions:
+	- (1) the drug targets have special topological structures that are different with normal proteins(==these special topological structures may help drug targets to respond to drug stimulus==).
+	- (2)drugs usually have a high centrality value in the drug-therapy network and act on multiple molecular targets in the human system.
+- novol point in this paper, taking the eccentricity, Modularity and Coreness into consideration.
+	- eccentricity(离心率)
+		- 指定一个距离，所谓的距离就是两个顶点之间的所连接彼此的边的数目，离心率就是在这些距离中取最大的那个距离，也就是边数最多的那个，![][3]
+		- the eccentricity shows the easiness of a protein to be functionally reached by all other proteins in the network.That means a protein with low eccentricity is subject to a more stringent or complex regulation so that it could easily influence seveal other proteins.
+	- Modularity(模板)
+		- the degree to which the components of the network may be separated and recombined.就是将蛋白质分成两个group/community
+	- Coreness(核数)
+
 
   [1]: ./images/1517132534506.jpg
+  [2]: ./images/1517193498490.jpg
+  [3]: ./images/1517217530206.jpg
